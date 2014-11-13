@@ -135,6 +135,8 @@ def scheme_read(src):
         return val
     elif val == "'":
         "*** YOUR CODE HERE ***"
+        return Pair('quote', Pair(scheme_read(src), nil))
+        
     elif val == "(":
         return read_tail(src)
     else:
