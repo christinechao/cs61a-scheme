@@ -134,7 +134,6 @@ def scheme_read(src):
     elif val not in DELIMITERS:
         return val
     elif val == "'":
-        "*** YOUR CODE HERE ***"
         return Pair('quote', Pair(scheme_read(src), nil))
         
     elif val == "(":
@@ -161,7 +160,11 @@ def read_tail(src):
     SyntaxError: Expected one element after .
     >>> scheme_read(Buffer(tokenize_lines(["(1", "2 .", "'(3 4))", "4"])))
     Pair(1, Pair(2, Pair('quote', Pair(Pair(3, Pair(4, nil)), nil))))
+
+    >>> read_line("(hi there . (cs . (student)))")
+    Pair("hi", Pair("there", Pair("cs", Pair("student", nil))))
     """
+
     try:
         if src.current() is None:
             raise SyntaxError("unexpected end of file")
@@ -169,7 +172,11 @@ def read_tail(src):
             src.pop()
             return nil
         elif src.current() == ".":
-            "*** YOUR CODE HERE ***"
+            src.pop()
+            result = scheme_read(src)
+            if src.pop() != ')':
+                raise SyntaxError("Expected one element after .")
+            return result
         else:
             first = scheme_read(src)
             rest = read_tail(src)
