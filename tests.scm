@@ -16,6 +16,20 @@
 ;;; License: Creative Commons share alike with attribution
 
 ;;; 1.1.1
+(quote (1 3 4 5))
+; expect (1 3 4 5)
+
+(quote 1 3)
+; expect Error
+
+'(hi there . (cs . (student)))
+; expect (hi there cs student)
+
+'()
+;(quote ())
+
+'(1 2 . 3)
+;Pair(1, Pair(2, 3))
 
 10
 ; expect 10
