@@ -7,6 +7,81 @@
 ;;; after the last test you wish to run.
 
 ;;; OUR tests <333 
+
+)
+; expect Error
+
+(+ 1 2))
+; expect Error
+
+()
+; expect ()
+
+( + 1 2    4
+    6    7
+    )
+; expect 20
+
+(- 2)
+; expect -2
+
+(2)
+; expect Error
+
+(())
+; expect Error
+
+;;(#t #f)
+;;; expect Error
+;;
+;;#t
+;;; expect #t
+;;
+;;true
+;;; expect #t
+;;
+;;false
+;;; expect #f
+
+(eval)
+; expect Error
+
+(eval 1)
+; expect 1
+
+(eval '(eval 1))
+; expect 1
+
+(eval 1 2)
+; expect Error
+
+(eval '(define bagel 3))
+; expect bagel
+
+'bagel
+; expect bagel
+
+bagel
+; expect 3
+
+(eval (define x 'y))
+; expect y
+
+(eval x)
+; expect Error
+
+(define y 10)
+; expect y
+
+x
+; expect y
+
+(eval x)
+; expect 10
+
+(eval '(eval '(eval nil)))
+; expect ()
+
 (quote (1 3 4 5))
 ; expect (1 3 4 5)
 
@@ -17,10 +92,24 @@
 ; expect (hi there cs student)
 
 '()
-;(quote ())
+; expect ()
 
 '(1 2 . 3)
-;Pair(1, Pair(2, 3))
+; expect (1 2 . 3)
+
+(cons 1 (cons 2 (cons (cons 3 4) 5)))
+; expect (1 2 (3 . 4) . 5)
+
+(define lst '(1 2 3))
+; expect lst
+
+(car lst)
+; expect 1
+
+(car (cdr lst))
+; expect 2
+
+
 
 ;;; These are examples from several sections of "The Structure
 ;;; and Interpretation of Computer Programs" by Abelson and Sussman.
@@ -69,7 +158,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Move the following (exit) line to run additional tests. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(exit)
 
 
 ;;; 1.1.2
@@ -91,6 +179,7 @@ size
 circumference
 ; expect 62.8318
 
+(exit)
 ;;; 1.1.4
 
 (define (square x) (* x x))
