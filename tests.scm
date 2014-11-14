@@ -6,16 +6,7 @@
 ;;;
 ;;; after the last test you wish to run.
 
-;;; **********************************
-;;; *** Add more of your own here! ***
-;;; **********************************
-
-;;; These are examples from several sections of "The Structure
-;;; and Interpretation of Computer Programs" by Abelson and Sussman.
-
-;;; License: Creative Commons share alike with attribution
-
-;;; 1.1.1
+;;; OUR tests <333 
 (quote (1 3 4 5))
 ; expect (1 3 4 5)
 
@@ -31,6 +22,12 @@
 '(1 2 . 3)
 ;Pair(1, Pair(2, 3))
 
+;;; These are examples from several sections of "The Structure
+;;; and Interpretation of Computer Programs" by Abelson and Sussman.
+
+;;; License: Creative Commons share alike with attribution
+
+;;; 1.1.1
 10
 ; expect 10
 
