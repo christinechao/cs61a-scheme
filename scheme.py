@@ -210,7 +210,9 @@ def do_define_form(vals, env):
     target = vals[0]
     if scheme_symbolp(target):
         check_form(vals, 2, 2)
-        "*** YOUR CODE HERE ***"
+        value = scheme_eval(vals[1], env)
+        env.define(target, scheme_eval(vals[1], env))
+        return target
     elif isinstance(target, Pair):
         "*** YOUR CODE HERE ***"
     else:
