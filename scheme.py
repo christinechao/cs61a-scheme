@@ -341,6 +341,14 @@ def check_formals(formals):
     >>> check_formals(read_line("(a b c)"))
     """
     "*** YOUR CODE HERE ***"
+    symbol_list = []
+    for x in formals:
+        if scheme_symbolp(x) == False:
+            raise SchemeError("not valid symbol in check_formals")
+        if x in symbol_list:
+            raise SchemeError("symbol is repeated in check_formals")
+        symbol_list.append(x)
+
 
 ##################
 # Tail Recursion #
