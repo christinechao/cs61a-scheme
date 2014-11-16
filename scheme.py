@@ -293,7 +293,11 @@ def do_cond_form(vals, env):
 def do_begin_form(vals, env):
     """Evaluate begin form with parameters VALS in environment ENV."""
     check_form(vals, 1)
-    "*** YOUR CODE HERE ***"
+    for i, expr in enumerate(vals):
+        if i == len(vals) - 1:
+            return expr
+        else:
+            scheme_eval(expr, env)
 
 LOGIC_FORMS = {
         "and": do_and_form,
