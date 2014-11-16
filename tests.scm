@@ -109,6 +109,18 @@ x
 (car (cdr lst))
 ; expect 2
 
+(begin (begin 2 (begin 3 4 5)))
+; expect 5
+
+(begin (begin 1 2 (begin 3 4)) 6 (begin 7))
+; expect 7
+
+(begin (define x 10) (define x (begin (define y 10) (define y 12))) x)
+; expect y
+
+(begin (define t (lambda 10 20 30)) (t))
+; expect 30
+
 
 
 ;;; These are examples from several sections of "The Structure
