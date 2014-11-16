@@ -118,6 +118,12 @@ x
 (begin (define x 10) (define x (begin (define y 10) (define y 12))) x)
 ; expect y
 
+(begin (define (t s a 69 96) 'x))
+; expect Error
+
+(begin (define (f x) (define g y (*x y))) (f 10 10))
+; expect 100
+
 (begin (define t (lambda 10 20 30)) (t))
 ; expect 30
 
