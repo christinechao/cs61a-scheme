@@ -220,7 +220,7 @@ def do_define_form(vals, env):
     if scheme_symbolp(target):
         check_form(vals, 2, 2)
         value = scheme_eval(vals[1], env)
-        env.define(target, scheme_eval(vals[1], env))
+        env.define(target, value)
         return target
     elif isinstance(target, Pair) and scheme_symbolp(target.first):
         target, formals = target.first, target.second
