@@ -131,7 +131,9 @@ class Frame:
         <{a: 1, b: 2, c: 3} -> <Global Frame>>
         """
         frame = Frame(self)
-        "*** YOUR CODE HERE ***"
+        check_form(vals, len(formals), len(formals))
+        for i in range(len(formals)):
+            frame.bindings[formals[i]] = scheme_eval(vals[i], self)
         return frame
 
     def define(self, sym, val):
