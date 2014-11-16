@@ -222,8 +222,11 @@ def do_define_form(vals, env):
         value = scheme_eval(vals[1], env)
         env.define(target, scheme_eval(vals[1], env))
         return target
-    elif isinstance(target, Pair):
-        "*** YOUR CODE HERE ***"
+    elif isinstance(target, Pair) and scheme_symbolp(target.first):
+        target, formals = target.first, target.second
+        body = vals.second
+        value = do_lambda_form(Pair(formals, body), env)
+        env.define(target, value)
     else:
         raise SchemeError("bad argument to define")
 
