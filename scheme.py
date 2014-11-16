@@ -59,6 +59,14 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, PrimitiveProcedure):
         return apply_primitive(procedure, args, env)
     elif isinstance(procedure, LambdaProcedure):
+        frame = Frame.make_call_frame(env, args, args)
+        #scheme_eval(procedure.body, frame)
+        #return procedure(args, procedure.body, env)
+
+
+
+
+
         "*** YOUR CODE HERE ***"
     elif isinstance(procedure, MuProcedure):
         "*** YOUR CODE HERE ***"

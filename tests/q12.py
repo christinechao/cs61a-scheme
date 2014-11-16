@@ -18,19 +18,16 @@ test = {
         'type': 'doctest'
       },
       {
-        'locked': True,
         'test': r"""
         >>> quine = "((lambda (x) (list x (list (quote quote) x))) (quote (lambda (x) (list x (list (quote quote) x)))))"
         >>> str(eval(quine)) == quine
-        f34008a6e4d61f073f26ac75528dcec4
-        # locked
+        True
         """,
         'type': 'doctest'
       }
     ],
     [
       {
-        'locked': True,
         'test': r"""
         >>> eval('''
         ... (define (outer x y)
@@ -39,8 +36,7 @@ test = {
         ...   (inner x 10))
         ... (outer 1 2)
         ... ''')
-        c62b71b2e553170255287a3b2affec26
-        # locked
+        17
         >>> eval('''
         ... (define (outer-func x y)
         ...    (define (inner z x)
@@ -48,8 +44,7 @@ test = {
         ...    inner)
         ... ((outer-func 1 2)  1 10)
         ... ''')
-        c62b71b2e553170255287a3b2affec26
-        # locked
+        17
         """,
         'type': 'doctest'
       },
