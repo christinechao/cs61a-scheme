@@ -266,7 +266,10 @@ def do_let_form(vals, env):
             raise SchemeError('bad argument name')
         names = Pair(binding[0], names)
         values = Pair(binding[1], values)
-    new_env = env.make_call_frame(names, values)
+    ''' this place could use some code cleanup;
+    check_formals
+    match values.map to similar map within scheme_eval'''
+    new_env = env.make_call_frame(names, values.map(lambda x: scheme_eval(x, env)))
 
     # Evaluate all but the last expression after bindings, and return the last
     last = len(exprs)-1
