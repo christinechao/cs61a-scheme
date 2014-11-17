@@ -59,15 +59,11 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, PrimitiveProcedure):
         return apply_primitive(procedure, args, env)
     elif isinstance(procedure, LambdaProcedure):
-        #frame = Frame.make_call_frame(env, args, args)
-        check_form(args, len(procedure.formals), len(procedure.formals))
-        for i in range(len(args)):
-            procedure.env.define(procedure.formals[i], args[i])
-        return scheme_eval(procedure.body, procedure.env)
-        #scheme_eval(procedure.body, frame)
-        #return procedure(args, procedure.body, env)
+        lambda_env = procedure.env.make_call_frame(procedure.formals, args)
+        return scheme_eval(procedure.body, lambda_env)
     elif isinstance(procedure, MuProcedure):
-        "*** YOUR CODE HERE ***"
+        mu_env = env.make_call_frame(procedure.formals, args)
+        return scheme_eval(procedure.body, mu_env)
     else:
         raise SchemeError("Cannot call {0}".format(str(procedure)))
 
@@ -139,7 +135,7 @@ class Frame:
         frame = Frame(self)
         check_form(vals, len(formals), len(formals))
         for i in range(len(formals)):
-            frame.define(formals[i], scheme_eval(vals[i], self))
+            frame.define(formals[i], vals[i])
         return frame
 
     def define(self, sym, val):
@@ -201,23 +197,34 @@ class MuProcedure:
 def do_lambda_form(vals, env):
     """Evaluate a lambda form with parameters VALS in environment ENV."""
     check_form(vals, 2)
-    formals = vals[0]
+    formals = vals.first
     check_formals(formals)
-    if len(vals) == 2:
-        body = vals[1]
-    else:
-        body = last = Pair('begin', nil)
-        for i in range(1, len(vals)):
-            last.second = Pair(vals[i], nil)
-            last = last.second
+    body = make_procedure_body(vals.second)
     return LambdaProcedure(formals, body, env)
 
 def do_mu_form(vals):
     """Evaluate a mu form with parameters VALS."""
     check_form(vals, 2)
-    formals = vals[0]
+    formals = vals.first
     check_formals(formals)
-    "*** YOUR CODE HERE ***"
+    body = make_procedure_body(vals.second)
+    return MuProcedure(formals, body)
+
+def make_procedure_body(lst):
+    """Make a procedure body from a scheme list. If LST has multiple entries,
+    then condense them into a single begin statement.
+    Otherwise, just return body."""
+    if len(lst) == 1:
+        return lst[0]
+    else:
+        body = last = Pair('begin', nil)
+        for i in range(len(lst)):
+            last.second = Pair(lst[i], nil)
+            last = last.second
+    return body
+
+# TODO: bad argument to define SchemeError... can we use this for all cases when checkin
+# formal parameters? Use check_formals to check all formal parameters
 
 def do_define_form(vals, env):
     """Evaluate a define form with parameters VALS in environment ENV."""
