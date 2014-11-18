@@ -323,8 +323,8 @@ def do_or_form(vals, env):
         return False
     for x in range(len(vals)):
         eval_result = scheme_eval(vals[x], env)
-        result = scheme_true(vals[x])
-        if result == True:
+        scheme_result = scheme_true(vals[x])
+        if scheme_result == True:
             return quote(eval_result)
     return scheme_eval(vals[len(vals)-1], env)
 
