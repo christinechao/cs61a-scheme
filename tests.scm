@@ -7,6 +7,7 @@
 ;;; after the last test you wish to run.
 
 ;;; OUR tests <333 
+(or 0)
 
 )
 ; expect Error
