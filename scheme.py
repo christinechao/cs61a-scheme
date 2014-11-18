@@ -297,6 +297,12 @@ def do_if_form(vals, env):
 def do_and_form(vals, env):
     """Evaluate short-circuited and with parameters VALS in environment ENV."""
     "*** YOUR CODE HERE ***"
+    if len(vals) == 0:
+        return True
+    for x in vals:
+        if scheme_eval(x, env) == False:
+            return False
+    return x
 
 def quote(value):
     """Return a Scheme expression quoting the Scheme VALUE.
@@ -312,6 +318,12 @@ def quote(value):
 def do_or_form(vals, env):
     """Evaluate short-circuited or with parameters VALS in environment ENV."""
     "*** YOUR CODE HERE ***"
+    if len(vals) == 0:
+        return False
+    for x in vals:
+        if scheme_eval(x, env) == True:
+            return True
+    return x
 
 def do_cond_form(vals, env):
     """Evaluate cond form with parameters VALS in environment ENV."""
