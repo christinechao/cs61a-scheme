@@ -328,7 +328,6 @@ def do_or_form(vals, env):
             return quote(eval_result)
     return scheme_eval(vals[len(vals)-1], env)
 
-
 def do_cond_form(vals, env):
     """Evaluate cond form with parameters VALS in environment ENV."""
     num_clauses = len(vals)
@@ -343,12 +342,19 @@ def do_cond_form(vals, env):
         else:
             test = scheme_eval(clause.first, env)
         if scheme_true(test):
+        # Note:
+        # >>> a = Pair(1, Pair(2, Pair(3, nil)))
+        # >>> a.second
+        # Pair(2, Pair(3, nil))
+        # >>> a[1]
+        # 2
             if len(clause.second) == 0:
                 return True
             elif len(clause.second) == 1:
-                return clause.second
+                return clause[1]
             else:
                 return do_begin_form(clause.second, env)
+            
     return okay
 
 def do_begin_form(vals, env):
