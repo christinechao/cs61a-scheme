@@ -303,11 +303,6 @@ def do_and_form(vals, env):
         if scheme_eval(vals[x], env) == False:
             return False
     return scheme_eval(vals[len(vals)-1], env)
-    # for x in vals:
-    #     temp_vals = x
-    #     if scheme_eval(x, env) == False:
-    #         return False
-    # return temp_vals
 
 def quote(value):
     """Return a Scheme expression quoting the Scheme VALUE.
@@ -326,26 +321,13 @@ def do_or_form(vals, env):
     "*** YOUR CODE HERE ***"
     if len(vals) == 0:
         return False
-    for x in range(len(vals) - 1):
-        result = scheme_eval(vals[x], env)
+    for x in range(len(vals)):
+        eval_result = scheme_eval(vals[x], env)
+        result = scheme_true(vals[x])
         if result == True:
-            return quote(result)
-    return vals[len(vals)-1]
+            return quote(eval_result)
+    return scheme_eval(vals[len(vals)-1], env)
 
-
-
-    # for x in range(len(vals)-1):
-    #     temp_vals = x
-    #     if scheme_eval(vals[x], env) == True:
-            
-    #         return quote(temp_vals)
-    # return scheme_eval(vals[len(vals)-1], env)
-
-
-    # for x in vals:
-    #     if scheme_eval(x, env) == True:
-    #         return quote(x)
-    # return x
 
 def do_cond_form(vals, env):
     """Evaluate cond form with parameters VALS in environment ENV."""
