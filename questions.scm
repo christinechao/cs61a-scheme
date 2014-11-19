@@ -26,8 +26,10 @@
 ; Problem 18
 ;; Turns a list of pairs into a pair of lists
 (define (zip pairs)
-  'YOUR-CODE-HERE
-  )
+  (define firsts (apply-to-all (lambda (pair) (car pair)) pairs))
+  (define seconds (apply-to-all (lambda (pair) (cadr pair)) pairs))
+  (list firsts seconds)
+)
 
 (zip '())
 ; expect (() ())
@@ -41,8 +43,22 @@
 ;; A list of all ways to partition TOTAL, where  each partition must
 ;; be at most MAX-VALUE and there are at most MAX-PIECES partitions.
 (define (list-partitions total max-pieces max-value)
-  'YOUR-CODE-HERE
+    (define (helper t mp mv sofar parts)
+      'do-the-thing
+    )
+    (helper total max-pieces max-value (list) (list))
   )
+
+;; perform (op i) for each i in Python range(lower, upper)
+(define (for-in-range op lower upper)
+  (if (< lower upper)
+    (begin
+      (op lower)
+      (for-in-range op (+ lower 1) upper)
+    )
+  )
+)
+
 
 (list-partitions 5 2 4)
 ; expects a permutation of ((4 1) (3 2))
