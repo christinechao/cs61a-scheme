@@ -43,12 +43,46 @@
 ;; A list of all ways to partition TOTAL, where  each partition must
 ;; be at most MAX-VALUE and there are at most MAX-PIECES partitions.
 (define (list-partitions total max-pieces max-value)
-    (define (helper t mp mv sofar parts)
-      'do-the-thing
-    )
-    (helper total max-pieces max-value (list) (list))
-  )
+    (define (helper t mp mv sofar parts count)
+      (cond
+        ;((and (= t 0) (not (null? sofar)))
+        ;  (append parts list(sofar)))
+        ((= t 0)
+         (if (not (null? sofar)) 
+             (append parts list(sofar)) 
+             0)
+         0)
 
+        ;((or (<= mp 0) (<= mv 0) (<= t 0))
+        ;  parts)
+
+        ((<= mp 0) parts)
+        ((<= mv 0) parts)
+        ((<= t 0) parts)
+
+        (else
+          (begin
+            (define old_parts parts)
+            (cond
+              ((>= count 1)
+                (if (<= count mv)
+                  (and (>= count 1) (<= count mv))
+                    (begin
+                      (define new_parts (helper (- t count) (- mp 1)
+                      (count) (append sofar list(count)) old_parts
+                      (+ count 1)))
+                      (define new_parts (no_empty new_parts))
+                  
+                  (append parts new_parts)
+                  parts
+                  ))))))))
+    (helper total max-pieces max-value (list) (list) 1))
+  
+(define (no_empty lst)
+  (if (null? lst) nil
+  (if (null? (cdr lst))
+     (car lst)
+     (cons (car lst) (no_empty (cdr lst))))))
 ;; perform (op i) for each i in Python range(lower, upper)
 (define (for-in-range op lower upper)
   (if (< lower upper)
@@ -56,6 +90,7 @@
       (op lower)
       (for-in-range op (+ lower 1) upper)
     )
+    nil
   )
 )
 
