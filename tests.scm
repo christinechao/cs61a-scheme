@@ -144,10 +144,30 @@ x
 (or (null? 'a) (and 'b 'c #f))
 ; expect False
 
+(and (= 0 0) (< 3 2) (= 3 3))
+; expect False
+
+(and (= 0 0) (= 0 0) (< 3 2))
+; expect False
+
+(and (= 0 1) (and (= 0 0) (= 2 2)))
+; expect False
+
+(and (= 0 0) (and (= 0 0) (= 2 2)))
+; expect True
+
 (or (<= 0 0) (<= 0 0) (<= 0 0))
 ; expect True
-(or (<= 1 0) (<= 1 0) (<= -1 0))
+
+(<= 1 2)
 ; expect True
+
+(or (= 2 3) (= 2 2))
+; expect True
+
+(or (<= 1 0) (<= 1 2) (<= -1 0))
+; expect True
+
 (define (f x y z)
   (or (<= x 0) (<= y 0) (<= z 0)))
 (f 0 0 0)
