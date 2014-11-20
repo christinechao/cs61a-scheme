@@ -198,8 +198,8 @@ def do_lambda_form(vals, env):
     """Evaluate a lambda form with parameters VALS in environment ENV."""
     check_form(vals, 2)
     formals = vals.first
-    if scheme_listp(formals) == False:
-        raise SchemeError("wrong lambda form")
+    if not scheme_listp(formals):
+        raise SchemeError("Lambda form lacks list of formals!")
     check_formals(formals)
     body = make_procedure_body(vals.second)
     return LambdaProcedure(formals, body, env)
@@ -208,6 +208,8 @@ def do_mu_form(vals):
     """Evaluate a mu form with parameters VALS."""
     check_form(vals, 2)
     formals = vals.first
+    if not scheme_listp(formals):
+        raise SchemeError("Mu form lacks list of formals!")
     check_formals(formals)
     body = make_procedure_body(vals.second)
     return MuProcedure(formals, body)
