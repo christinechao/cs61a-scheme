@@ -106,6 +106,9 @@ x
 (cons 1 (cons 2 (cons (cons 3 4) 5)))
 ; expect (1 2 (3 . 4) . 5)
 
+(cons 1 2)
+; expect (1 . 2)
+
 (define lst '(1 2 3))
 ; expect lst
 
@@ -178,6 +181,84 @@ x
 ; expect True
 (f 5 5 5)
 ; expect False
+
+(let ((let let) (let let)) let)
+; expect Error
+(let ( (f (lambda (x y z) x)) (b 10))
+  (f 'b b 20)
+)
+; expect b
+(let ( (f (begin 10 20 30))
+       (g (begin (begin (begin 10 20) 30) (lambda (x y z) x)))
+     )
+    (g f f f)
+)
+; expect 30
+(let ((_ _)) _)
+; expect Error
+
+(if 1
+  2
+  3
+)
+; expect 2
+(if (if (if (if 1 2 3) 2 3) 2 3) 2 3)
+; expect 2
+(if (if (cond 
+          (#f #f)
+          (#f #f)
+          (else #f)
+        )
+      2 False)
+2 3)
+; expect 3
+(cond
+  (#f not-evaluated)
+  (#f not-evaluated)
+  ((null? (list 'not-null)) not-evaluated)
+)
+; expect okay
+(cond
+  (#f not-evaluated)
+  (1 1)
+  (not-evaluated not-evaluated)
+)
+;
+; expect 1
+(cond
+  ((not (define (f x) 'awesome)) not-evaluated)
+  ((cond
+    ((not #t) not-evaluated)
+    ((define (f x) 'different-env) (f f))
+   )
+   (f 10)
+  )
+  (else not-evaluated)
+)
+; expect different-env
+
+(define (f x y) (+ x y))
+; expect f
+(f 1 3)
+; expect 4
+(define m (mu () (+ x y)))
+; expect m
+(let ((x 1) (y 2))
+  (f 11 11)
+  (begin
+    (mu)
+  )
+)
+; expect 3
+(define (g x y) (mu))
+; expect g
+(g 1 5)
+; expect 6
+(g 'a 'a)
+; expect Error
+(mu mu mu)
+; expect Error
+
 
 
 
@@ -751,7 +832,6 @@ one-through-four
 ;;; Extra credit ;;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(exit)
 
 ; Tail call optimization test
 (define (sum n total)

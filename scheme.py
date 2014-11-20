@@ -416,7 +416,7 @@ def check_formals(formals):
 
 def scheme_optimized_eval(expr, env):
     """Evaluate Scheme expression EXPR in environment ENV."""
-    print('evaluate: ', expr)
+    #print('evaluate: ', expr)
     while True:
         if expr is None:
             raise SchemeError("Cannot evaluate an undefined expression.")
