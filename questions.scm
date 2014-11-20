@@ -71,7 +71,6 @@
    )
    (helper total max-pieces max-value (list) (list))
 )
-
 ;; perform (op i) for each i in Python range(lower, upper)
 ;; then result some result at the end
 (define (for-in-range op lower upper)
@@ -80,6 +79,7 @@
       (op lower)
       (for-in-range op (+ lower 1) upper)
     )
+    nil
   )
 )
 
