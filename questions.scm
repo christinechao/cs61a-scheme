@@ -101,28 +101,40 @@
 (define quoted? (check-special 'quote))
 (define let?    (check-special 'let))
 
+(define (analyze_body body)
+  (if (null? body)
+    nil
+    (cons (analyze (car body)) (analyze_body (cdr body)))))
+    
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (analyze expr)
   (cond ((atom? expr)
-         'YOUR-CODE-HERE
+         expr
          )
         ((quoted? expr)
-         'YOUR-CODE-HERE
+         ;(cdr expr)
+         expr
          )
         ((or (lambda? expr)
              (define? expr))
-         (let ((form   (car expr))
-               (params (cadr expr))
-               (body   (cddr expr)))
-           'YOUR-CODE-HERE
-           ))
+            (let ((form   (car expr))
+                 (params (cadr expr))
+                 (body   (cddr expr)))
+            (if (null? body)
+              nil
+                (append (list form params) (car (list (analyze_body body)))))
+            ))
         ((let? expr)
          (let ((values (cadr expr))
                (body   (cddr expr)))
-           'YOUR-CODE-HERE
+
+           (define values_split (zip values))
+
+           (list (list 'lambda (car values_split) (car (analyze body))) 
+            (car (car (cdr values_split)))) 
            ))
         (else
-         'YOUR-CODE-HERE
+         expr
          )))
 
 (analyze 1)
