@@ -234,8 +234,10 @@ x
   ('a)
 )
 ; expect a
+
+;;;; in STK, this evaluates to True. But in our implementation, Error.
 (cond (else))
-; expect True
+; expect Error
 (cond
   ((not (define (f x) 'awesome)) not-evaluated)
   ((cond

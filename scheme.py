@@ -355,7 +355,7 @@ def do_cond_form(vals, env):
         # >>> a[1]
         # 2
             if len(clause.second) == 0:
-                return True
+                return clause.first
             elif len(clause.second) == 1:
                 return clause[1]
             else:
