@@ -133,6 +133,33 @@ x
 (begin (define t (lambda 10 20 30)) (t))
 ; expect Error
 
+(or (1))
+; expect Error
+(or 1 2 3)
+; expect 1
+(or)
+; expect False
+(and)
+; expect True
+(or (null? 'a) (and 'b 'c #f))
+; expect False
+
+(or (<= 0 0) (<= 0 0) (<= 0 0))
+; expect True
+(or (<= 1 0) (<= 1 0) (<= -1 0))
+; expect True
+(define (f x y z)
+  (or (<= x 0) (<= y 0) (<= z 0)))
+(f 0 0 0)
+; expect True
+(f 1 1 -1)
+; expect True
+(f 1 0 -4)
+; expect True
+(f 5 5 5)
+; expect False
+
+
 
 
 ;;; These are examples from several sections of "The Structure
