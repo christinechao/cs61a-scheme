@@ -198,6 +198,8 @@ def do_lambda_form(vals, env):
     """Evaluate a lambda form with parameters VALS in environment ENV."""
     check_form(vals, 2)
     formals = vals.first
+    if scheme_listp(formals) == False:
+        raise SchemeError("wrong lambda form")
     check_formals(formals)
     body = make_procedure_body(vals.second)
     return LambdaProcedure(formals, body, env)

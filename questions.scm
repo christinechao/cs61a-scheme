@@ -47,7 +47,7 @@
       ;(display (list t mp mv sofar partitions))
       ;(newline)
       (if (and (= t 0) (not (null? sofar)))
-        (define partitions (append partitions (list sofar)))
+        (define partitions (append partitions (list sofar))) nil
       )
       (if (or (<= mp 0) (<= mv 0) (<= t 0))
         partitions

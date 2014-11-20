@@ -7,7 +7,12 @@
 ;;; after the last test you wish to run.
 
 ;;; OUR tests <333 
+
+
+
 (or 0)
+
+
 
 )
 ; expect Error
@@ -122,11 +127,11 @@ x
 (begin (define (t s a 69 96) 'x))
 ; expect Error
 
-(begin (define (f x) (define g y (*x y))) (f 10 10))
-; expect 100
+(begin (define (f x) (define g y (* x y))) ((f 10) 10))
+; expect Error
 
 (begin (define t (lambda 10 20 30)) (t))
-; expect 30
+; expect Error
 
 
 
