@@ -43,13 +43,37 @@
 ;; A list of all ways to partition TOTAL, where  each partition must
 ;; be at most MAX-VALUE and there are at most MAX-PIECES partitions.
 (define (list-partitions total max-pieces max-value)
-    (define (helper t mp mv sofar parts)
-      'do-the-thing
-    )
-    (helper total max-pieces max-value (list) (list))
-  )
+    (define (helper t mp mv sofar partitions)
+      ;(display (list t mp mv sofar partitions))
+      ;(newline)
+      (if (and (= t 0) (not (null? sofar)))
+        (define partitions (append partitions (list sofar)))
+      )
+      (if (or (<= mp 0) (<= mv 0) (<= t 0))
+        partitions
+        (begin
+          (define (looper i upper old_parts partitions)
+            ;(display (list looper i upper old_parts partitions))
+            ;(newline)
+            (if (>= i upper)
+              partitions
+              (begin
+                (define new_parts (helper (- t i) (- mp 1) i (append sofar (list i)) old_parts))
+                (define new_parts (keep-if (lambda (e) (not (null? e))) new_parts))
+                (define partitions (append partitions new_parts))
+                (looper (+ i 1) upper old_parts partitions)
+              )
+            )
+          )
+          (looper 1 (+ mv 1) partitions partitions)
+        )
+     )
+   )
+   (helper total max-pieces max-value (list) (list))
+)
 
 ;; perform (op i) for each i in Python range(lower, upper)
+;; then result some result at the end
 (define (for-in-range op lower upper)
   (if (< lower upper)
     (begin
