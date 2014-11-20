@@ -325,12 +325,11 @@ def do_or_form(vals, env):
     "*** YOUR CODE HERE ***"
     if len(vals) == 0:
         return False
-    for x in range(len(vals)):
-        eval_result = scheme_eval(vals[x], env)
-        scheme_result = scheme_true(vals[x])
-        if scheme_result == True:
-            return quote(eval_result)
-    return scheme_eval(vals[len(vals)-1], env)
+    for i in range(len(vals) - 1):
+        evaluated = scheme_eval(vals[i], env)
+        if scheme_true(evaluated):
+            return quote(evaluated)
+    return vals[len(vals)-1]
 
 def do_cond_form(vals, env):
     """Evaluate cond form with parameters VALS in environment ENV."""
