@@ -416,6 +416,7 @@ def check_formals(formals):
 
 def scheme_optimized_eval(expr, env):
     """Evaluate Scheme expression EXPR in environment ENV."""
+    print('evaluate: ', expr)
     while True:
         if expr is None:
             raise SchemeError("Cannot evaluate an undefined expression.")
@@ -435,6 +436,9 @@ def scheme_optimized_eval(expr, env):
         if (scheme_symbolp(first) # first might be unhashable
             and first in LOGIC_FORMS):
             "*** YOUR CODE HERE ***"
+            #original:
+            #return scheme_eval(LOGIC_FORMS[first](rest, env), env)
+            expr = LOGIC_FORMS[first](rest, env)
         elif first == "lambda":
             return do_lambda_form(rest, env)
         elif first == "mu":
@@ -444,30 +448,40 @@ def scheme_optimized_eval(expr, env):
         elif first == "quote":
             return do_quote_form(rest)
         elif first == "let":
-            expr, env = do_let_form(rest, env, False)
+            expr, env = do_let_form(rest, env)
         else:
             # user-defined lambda
-            procedure = scheme_eval(first, env)
-            args = rest.map(lambda operand: scheme_eval(operand, env))
-            return scheme_apply(procedure, args, env)
+            procedure = scheme_eval(first, env)  # non-tail context: scheme_eval ok
+            args = rest.map(lambda operand: scheme_eval(operand, env)) # non-tail context
+
+            if isinstance(procedure, PrimitiveProcedure):
+                return apply_primitive(procedure, args, env)
+            elif isinstance(procedure, LambdaProcedure):
+                lambda_env = procedure.env.make_call_frame(procedure.formals, args)
+                expr, env = procedure.body, lambda_env
+            elif isinstance(procedure, MuProcedure):
+                mu_env = env.make_call_frame(procedure.formals, args)
+                expr, env = procedure.body, mu_env
+            else:
+                raise SchemeError("Cannot call {0}".format(str(procedure)))
 
 def optimized_scheme_apply(procedure, args, env):
     """Apply Scheme PROCEDURE to argument values ARGS in environment ENV."""
     if isinstance(procedure, PrimitiveProcedure):
-        return apply_primitive(procedure, args, env)
+        return apply_primitive(procedure, args, env), env
     elif isinstance(procedure, LambdaProcedure):
         lambda_env = procedure.env.make_call_frame(procedure.formals, args)
-        return scheme_eval(procedure.body, lambda_env)
+        return procedure.body, lambda_env
     elif isinstance(procedure, MuProcedure):
         mu_env = env.make_call_frame(procedure.formals, args)
-        return scheme_eval(procedure.body, mu_env)
+        return procedure.body, mu_env
     else:
         raise SchemeError("Cannot call {0}".format(str(procedure)))
 
 ################################################################
 # Uncomment the following line to apply tail call optimization #
 ################################################################
-# scheme_eval = scheme_optimized_eval
+scheme_eval = scheme_optimized_eval
 
 
 ################
