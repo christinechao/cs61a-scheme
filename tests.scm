@@ -246,11 +246,11 @@ x
 (let ((x 1) (y 2))
   (f 11 11)
   (begin
-    (mu)
+    (m)
   )
 )
 ; expect 3
-(define (g x y) (mu))
+(define (g x y) (m))
 ; expect g
 (g 1 5)
 ; expect 6
@@ -259,6 +259,24 @@ x
 (mu mu mu)
 ; expect Error
 
+;; Test nested mu
+(define fm (mu () (+ x y z)))
+; expect fm
+(define am (mu (a b) (fm)))
+; expect am
+(define pm (mu (x y z) (am 1 1)))
+; expect pm
+(define ff (lambda (x y z) (am 1 1)))
+; expect ff
+(ff 1 10 100)
+; expect 111
+(pm 1 10 100)
+; expect 111
+(begin
+  (define y 10)
+  ( (lambda (x z) (fm)) 200 3)
+)
+; expect 213
 
 
 
