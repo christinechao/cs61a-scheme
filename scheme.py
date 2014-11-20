@@ -444,16 +444,25 @@ def scheme_optimized_eval(expr, env):
         elif first == "quote":
             return do_quote_form(rest)
         elif first == "let":
-            expr, env = do_let_form(rest, env)
-            return scheme_eval(expr, env)
+            expr, env = do_let_form(rest, env, False)
         else:
+            # user-defined lambda
             procedure = scheme_eval(first, env)
             args = rest.map(lambda operand: scheme_eval(operand, env))
             return scheme_apply(procedure, args, env)
 
-def optimized_do_let_form(rest, env):
-    """Don't create a new environment."""
-
+def optimized_scheme_apply(procedure, args, env):
+    """Apply Scheme PROCEDURE to argument values ARGS in environment ENV."""
+    if isinstance(procedure, PrimitiveProcedure):
+        return apply_primitive(procedure, args, env)
+    elif isinstance(procedure, LambdaProcedure):
+        lambda_env = procedure.env.make_call_frame(procedure.formals, args)
+        return scheme_eval(procedure.body, lambda_env)
+    elif isinstance(procedure, MuProcedure):
+        mu_env = env.make_call_frame(procedure.formals, args)
+        return scheme_eval(procedure.body, mu_env)
+    else:
+        raise SchemeError("Cannot call {0}".format(str(procedure)))
 
 ################################################################
 # Uncomment the following line to apply tail call optimization #
