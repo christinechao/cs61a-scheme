@@ -254,8 +254,9 @@ def do_quote_form(vals):
     return vals.first     
 
 
-def do_let_form(vals, env):
-    """Evaluate a let form with parameters VALS in environment ENV."""
+def do_let_form(vals, env, new_env=True):
+    """Evaluate a let form with parameters VALS in environment ENV.
+    *added: if new_env is True, then create make a call frame as new environment"""
     check_form(vals, 2)
     bindings = vals[0]
     exprs = vals.second
@@ -273,13 +274,14 @@ def do_let_form(vals, env):
     ''' this place could use some code cleanup;
     check_formals
     match values.map to similar map within scheme_eval'''
-    new_env = env.make_call_frame(names, values.map(lambda x: scheme_eval(x, env)))
+    if new_env:
+        env = env.make_call_frame(names, values.map(lambda x: scheme_eval(x, env)))
 
     # Evaluate all but the last expression after bindings, and return the last
     last = len(exprs)-1
     for i in range(0, last):
-        scheme_eval(exprs[i], new_env)
-    return exprs[last], new_env
+        scheme_eval(exprs[i], env)
+    return exprs[last], env
 
 
 #########################
@@ -442,9 +444,16 @@ def scheme_optimized_eval(expr, env):
         elif first == "quote":
             return do_quote_form(rest)
         elif first == "let":
-            "*** YOUR CODE HERE ***"
+            expr, env = do_let_form(rest, env)
+            return scheme_eval(expr, env)
         else:
-            "*** YOUR CODE HERE ***"
+            procedure = scheme_eval(first, env)
+            args = rest.map(lambda operand: scheme_eval(operand, env))
+            return scheme_apply(procedure, args, env)
+
+def optimized_do_let_form(rest, env):
+    """Don't create a new environment."""
+
 
 ################################################################
 # Uncomment the following line to apply tail call optimization #
