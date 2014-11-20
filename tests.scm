@@ -223,8 +223,19 @@ x
   (1 1)
   (not-evaluated not-evaluated)
 )
-;
 ; expect 1
+(cond
+  (1)
+  (2)
+  (3)
+)
+; expect 1
+(cond
+  ('a)
+)
+; expect a
+(cond (else))
+; expect True
 (cond
   ((not (define (f x) 'awesome)) not-evaluated)
   ((cond
