@@ -244,6 +244,7 @@ def do_define_form(vals, env):
         body = vals.second
         value = do_lambda_form(Pair(formals, body), env)
         env.define(target, value)
+        return target
     else:
         raise SchemeError("bad argument to define")
 
