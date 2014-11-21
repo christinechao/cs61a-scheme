@@ -32,18 +32,6 @@
 (())
 ; expect Error
 
-;;(#t #f)
-;;; expect Error
-;;
-;;#t
-;;; expect #t
-;;
-;;true
-;;; expect #t
-;;
-;;false
-;;; expect #f
-
 (eval)
 ; expect Error
 
@@ -133,12 +121,16 @@ x
 
 (or (1))
 ; expect Error
+
 (or 1 2 3)
 ; expect 1
+
 (or)
 ; expect False
+
 (and)
 ; expect True
+
 (or (null? 'a) (and 'b 'c #f))
 ; expect False
 
@@ -179,16 +171,19 @@ x
 
 (let ((let let) (let let)) let)
 ; expect Error
+
 (let ( (f (lambda (x y z) x)) (b 10))
   (f 'b b 20)
 )
 ; expect b
+
 (let ( (f (begin 10 20 30))
        (g (begin (begin (begin 10 20) 30) (lambda (x y z) x)))
      )
     (g f f f)
 )
 ; expect 30
+
 (let ((_ _)) _)
 ; expect Error
 
@@ -197,8 +192,10 @@ x
   3
 )
 ; expect 2
+
 (if (if (if (if 1 2 3) 2 3) 2 3) 2 3)
 ; expect 2
+
 (if (if (cond 
           (#f #f)
           (#f #f)
@@ -207,24 +204,28 @@ x
       2 False)
 2 3)
 ; expect 3
+
 (cond
   (#f not-evaluated)
   (#f not-evaluated)
   ((null? (list 'not-null)) not-evaluated)
 )
 ; expect okay
+
 (cond
   (#f not-evaluated)
   (1 1)
   (not-evaluated not-evaluated)
 )
 ; expect 1
+
 (cond
   (1)
   (2)
   (3)
 )
 ; expect 1
+
 (cond
   ('a)
 )
@@ -233,6 +234,7 @@ x
 ;;;; in STK, this evaluates to True. But in our implementation, Error.
 (cond (else))
 ; expect Error
+
 (cond
   ((not (define (f x) 'awesome)) not-evaluated)
   ((cond
