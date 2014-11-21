@@ -76,10 +76,9 @@ def apply_primitive(procedure, args, env):
     >>> apply_primitive(plus, twos, env)
     4
     """
-    args = [args[i] for i in range(len(args))]
+    args = [args[i] for i in range(len(args))]  # converts from Pair to List
     if procedure.use_env:
         args.append(env)
-
     try:
         return procedure.fn(*args)
     except TypeError:
@@ -265,18 +264,15 @@ def do_let_form(vals, env):
         if not scheme_symbolp(binding[0]):
             raise SchemeError('bad argument name')
         names = Pair(binding[0], names)
-        values = Pair(binding[1], values)
-    values = values.map(lambda x: scheme_eval(x, env))
-    ''' this place could use some code cleanup;
-    check_formals
-    match values.map to similar map within scheme_eval'''
-    env = env.make_call_frame(names, values)
+        values = Pair(scheme_eval(binding[1], env), values)
+        
+    new_env = env.make_call_frame(names, values)
 
     # Evaluate all but the last expression after bindings, and return the last
     last = len(exprs)-1
     for i in range(0, last):
-        scheme_eval(exprs[i], env)
-    return exprs[last], env
+        scheme_eval(exprs[i], new_env)
+    return exprs[last], new_env
 
 
 #########################
@@ -287,7 +283,7 @@ def do_if_form(vals, env):
     """Evaluate if form with parameters VALS in environment ENV."""
     check_form(vals, 2, 3)
     predicate_value = scheme_eval(vals[0], env)
-    has_else = len(vals) == 3
+    has_else = (len(vals) == 3)
     if scheme_true(predicate_value):
         return vals[1]
     elif has_else:
@@ -322,9 +318,9 @@ def do_or_form(vals, env):
     if len(vals) == 0:
         return False
     for i in range(len(vals) - 1):
-        evaluated = scheme_eval(vals[i], env)
-        if scheme_true(evaluated):
-            return quote(evaluated)
+        scheme_evaluated = scheme_eval(vals[i], env)
+        if scheme_true(scheme_evaluated):
+            return quote(scheme_evaluated)
     return vals[len(vals)-1]
 
 def do_cond_form(vals, env):
@@ -347,7 +343,6 @@ def do_cond_form(vals, env):
                 return clause[1]
             else:
                 return do_begin_form(clause.second, env)
-            
     return okay
 
 def do_begin_form(vals, env):

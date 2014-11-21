@@ -120,22 +120,86 @@
             (let ((form   (car expr))
                  (params (cadr expr))
                  (body   (cddr expr)))
-            (if (null? body)
-              nil
-                (append (list form params) (car (list (analyze_body body)))))
+                (if (= (length body) 1)
+                  (list form params (car (analyze body)))
+                  (list form params (analyze (car body)) (analyze (car (cdr body)))))
+                  ;(list form params (car body) (list (analyze (cdr body)))))
             ))
         ((let? expr)
          (let ((values (cadr expr))
                (body   (cddr expr)))
 
            (define values_split (zip values))
+           (define params (car values_split))
+           (define param_values (car (cdr values_split)))
+           ;(define param_values (cdr values_split))
+                    ;(car 'lambda (car (car zip values) (car body list_values)))
+           ;(cons (cons 'lambda (cons params (cons (car body) nil)) (car param_values))
+           ;(list (list 'lambda params (car body)) param_values) 
+           ;param_values
+           (append (list (list 'lambda (analyze params) (car (analyze body)))) (analyze param_values))
 
-           (list (list 'lambda (car values_split) (car (analyze body))) 
-            (car (car (cdr values_split)))) 
+
+
+
+
+
+;WRONG
+
+
+
+
+
+
+
+          ;param_values
+           ;(cons 'lambda (cons params (cons body (cons param_values))))
+           
+           ;(list 'lambda (car (zip values)) body (list_values))
+                      ;(list (list 'lambda (car values_split) (car (apply-to-all analyze body))) 
+                        ;(car (car (cdr values_split)))) 
+
+                        ;(cons (cons 'lambda (cons (car values_split) (cons body))) (cdr (values_split)))
+                      ;(list 'lambda (car values_split) (car (analyze body)) (car (car (cdr values_split))))
+
            ))
         (else
-         expr
+        expr
+        
+         ;(if (> (length expr) 1)
+         ;  (analyze expr) expr)
          )))
+
+; (define (analyze expr)
+;   (cond ((atom? expr)
+;          expr
+;          )
+;         ((quoted? expr)
+;          ;(cdr expr)
+;          expr
+;          )
+;         ((or (lambda? expr)
+;              (define? expr))
+;             (let ((form   (car expr))
+;                  (params (cadr expr))
+;                  (body   (cddr expr)))
+;             (if (null? body)
+;               nil
+;                 (append (list form params) (car (list (analyze_body body)))))
+;             ))
+;         ((let? expr)
+;          (let ((values (cadr expr))
+;                (body   (cddr expr)))
+
+;            (define values_split (zip values))
+
+;            (list (list 'lambda (car values_split) (car (analyze_body body))) 
+;             (car (car (cdr values_split)))) 
+;            ))
+;         (else
+;          (if (list? expr)
+;            (analyze_body expr) expr)
+;          )))
 
 (analyze 1)
 ; expect 1
