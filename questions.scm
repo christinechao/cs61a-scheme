@@ -108,8 +108,6 @@
     
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (analyze expr)
-  (display (list 'analyzing expr))
-  (newline)
   (cond ((atom? expr)
          expr
          )
@@ -136,37 +134,6 @@
         (else
           (apply-to-all analyze expr)
          )))
-
-; (define (analyze expr)
-;   (cond ((atom? expr)
-;          expr
-;          )
-;         ((quoted? expr)
-;          ;(cdr expr)
-;          expr
-;          )
-;         ((or (lambda? expr)
-;              (define? expr))
-;             (let ((form   (car expr))
-;                  (params (cadr expr))
-;                  (body   (cddr expr)))
-;             (if (null? body)
-;               nil
-;                 (append (list form params) (car (list (analyze_body body)))))
-;             ))
-;         ((let? expr)
-;          (let ((values (cadr expr))
-;                (body   (cddr expr)))
-
-;            (define values_split (zip values))
-
-;            (list (list 'lambda (car values_split) (car (analyze_body body))) 
-;             (car (car (cdr values_split)))) 
-;            ))
-;         (else
-;          (if (list? expr)
-;            (analyze_body expr) expr)
-;          )))
 
 (analyze 1)
 ; expect 1
