@@ -108,6 +108,8 @@
     
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (analyze expr)
+  (display (list 'analyzing expr))
+  (newline)
   (cond ((atom? expr)
          expr
          )
@@ -115,59 +117,24 @@
          ;(cdr expr)
          expr
          )
-        ((or (lambda? expr)
-             (define? expr))
-            (let ((form   (car expr))
-                 (params (cadr expr))
-                 (body   (cddr expr)))
-                (if (= (length body) 1)
-                  (list form params (car (analyze body)))
-                  (list form params (analyze (car body)) (analyze (car (cdr body)))))
-                  ;(list form params (car body) (list (analyze (cdr body)))))
-            ))
+        ((or (lambda? expr) (define? expr))
+         (define op (car expr))
+         (define formals (cadr expr))
+         (define body (apply-to-all analyze (cddr expr)))
+         (append (list op formals) body)
+        )
         ((let? expr)
-         (let ((values (cadr expr))
-               (body   (cddr expr)))
+         (let ((bindings (cadr expr))
+               (body   (apply-to-all analyze (cddr expr))))
 
-           (define values_split (zip values))
-           (define params (car values_split))
-           (define param_values (car (cdr values_split)))
-           ;(define param_values (cdr values_split))
-                    ;(car 'lambda (car (car zip values) (car body list_values)))
-           ;(cons (cons 'lambda (cons params (cons (car body) nil)) (car param_values))
-           ;(list (list 'lambda params (car body)) param_values) 
-           ;param_values
-           (append (list (list 'lambda (analyze params) (car (analyze body)))) (analyze param_values))
-
-
-
-
-
-
-;WRONG
-
-
-
-
-
-
-
-          ;param_values
-           ;(cons 'lambda (cons params (cons body (cons param_values))))
-           
-           ;(list 'lambda (car (zip values)) body (list_values))
-                      ;(list (list 'lambda (car values_split) (car (apply-to-all analyze body))) 
-                        ;(car (car (cdr values_split)))) 
-
-                        ;(cons (cons 'lambda (cons (car values_split) (cons body))) (cdr (values_split)))
-                      ;(list 'lambda (car values_split) (car (analyze body)) (car (car (cdr values_split))))
-
+           (define zipped (zip bindings))
+           (define parameters (car zipped))
+           (define param_values (apply-to-all analyze (cadr zipped)))
+           (define fn (append (list 'lambda parameters) body))
+           (cons fn param_values)
            ))
         (else
-        expr
-        
-         ;(if (> (length expr) 1)
-         ;  (analyze expr) expr)
+          (apply-to-all analyze expr)
          )))
 
 ; (define (analyze expr)
