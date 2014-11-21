@@ -9,11 +9,6 @@
 ;;; OUR tests <333 
 
 
-
-(or 0)
-
-
-
 )
 ; expect Error
 
