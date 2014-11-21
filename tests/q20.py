@@ -38,22 +38,24 @@ test = {
         'test': r"""
         >>> check_scheme('''
         ... (analyze '(let ((a 1)
-        ...                        (b 2))
-        ...                    (+ a b)))
+        ...                 (b 2))
+        ...             (+ a b)))
         ... ''')
-        >>> '((lambda (a b) (+ a b)) 1 2)'
+        '((lambda (a b) (+ a b)) 1 2)'
         >>> check_scheme('''
         ... (analyze '(let ((a (let ((a 2)) a))
-        ...                        (b 2))
-        ...                    (+ a b)))
+        ...                 (b 2))
+        ...             (+ a b)))
         ... ''')
-        >>> '((lambda (a b) (+ a b)) ((lambda (a) a) 2) 2)'
+        '((lambda (a b) (+ a b)) ((lambda (a) a) 2) 2)'
         >>> check_scheme('''
         ... (analyze '(let ((a 1))
-        ...                    (let ((b a))
-        ...                      b)))
+        ...             (let ((b a))
+        ...               b)))
         ... ''')
-        >>> '((lambda (a) ((lambda (b) b) a)) 1)'
+        '((lambda (a) ((lambda (b) b) a)) 1)'
+        >>> check_scheme("(analyze '(+ 1 (let ((a 1)) a)))")
+        '(+ 1 ((lambda (a) a) 1))'
         """,
         'type': 'doctest'
       }
