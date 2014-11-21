@@ -227,9 +227,6 @@ def make_procedure_body(lst):
             last = last.second
     return body
 
-# TODO: bad argument to define SchemeError... can we use this for all cases when checkin
-# formal parameters? Use check_formals to check all formal parameters
-
 def do_define_form(vals, env):
     """Evaluate a define form with parameters VALS in environment ENV."""
     check_form(vals, 2)
@@ -251,13 +248,10 @@ def do_define_form(vals, env):
 def do_quote_form(vals):
     """Evaluate a quote form with parameters VALS."""
     check_form(vals, 1, 1)
-    "*** YOUR CODE HERE ***"
     return vals.first     
 
-
-def do_let_form(vals, env, new_env=True):
-    """Evaluate a let form with parameters VALS in environment ENV.
-    *added: if new_env is True, then create make a call frame as new environment"""
+def do_let_form(vals, env):
+    """Evaluate a let form with parameters VALS in environment ENV."""
     check_form(vals, 2)
     bindings = vals[0]
     exprs = vals.second
@@ -275,8 +269,7 @@ def do_let_form(vals, env, new_env=True):
     ''' this place could use some code cleanup;
     check_formals
     match values.map to similar map within scheme_eval'''
-    if new_env:
-        env = env.make_call_frame(names, values.map(lambda x: scheme_eval(x, env)))
+    env = env.make_call_frame(names, values.map(lambda x: scheme_eval(x, env)))
 
     # Evaluate all but the last expression after bindings, and return the last
     last = len(exprs)-1
@@ -325,7 +318,6 @@ def quote(value):
 
 def do_or_form(vals, env):
     """Evaluate short-circuited or with parameters VALS in environment ENV."""
-    "*** YOUR CODE HERE ***"
     if len(vals) == 0:
         return False
     for i in range(len(vals) - 1):
@@ -348,12 +340,6 @@ def do_cond_form(vals, env):
         else:
             test = scheme_eval(clause.first, env)
         if scheme_true(test):
-        # Note:
-        # >>> a = Pair(1, Pair(2, Pair(3, nil)))
-        # >>> a.second
-        # Pair(2, Pair(3, nil))
-        # >>> a[1]
-        # 2
             if len(clause.second) == 0:
                 return clause.first
             elif len(clause.second) == 1:
