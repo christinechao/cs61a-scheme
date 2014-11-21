@@ -398,10 +398,7 @@ def check_formals(formals):
     """Check that FORMALS is a valid parameter list, a Scheme list of symbols
     in which each symbol is distinct. Raise a SchemeError if the list of formals
     is not a well-formed list of symbols or if any symbol is repeated.
-
-    >>> check_formals(read_line("(a b c)"))
     """
-    "*** YOUR CODE HERE ***"
     symbol_list = []
     for x in formals:
         if scheme_symbolp(x) == False:
